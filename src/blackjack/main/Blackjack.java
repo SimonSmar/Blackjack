@@ -76,17 +76,18 @@ public class Blackjack {
 				dealerFinished = true;
 			}
 			if(dealerHandValue[0] > 16 && !dealerFinished) {
-				System.out.println("Hit Limit");
+				System.out.println("Dealer hit Limit");
 				dealerFinished = true;
 			}
 		}
 		int dealerFinalValue;
 		if(dealerHandValue.length == 2) {
-			dealerFinalValue = playerHandValue[1];
+			dealerFinalValue = dealerHandValue[1];
 		} else {
-			dealerFinalValue = playerHandValue[0];
+			dealerFinalValue = dealerHandValue[0];
 		}
-		//Check who wins
+		
+		///////////Check who wins
 		if(player.hand.hasBlackjack()){
 			if(dealer.hand.hasBlackjack()) {
 			System.out.println("Push!");
@@ -105,7 +106,6 @@ public class Blackjack {
 					} else {
 						System.out.println("Dealer wins!");
 					}
-					System.out.println("Reached A");
 				}
 		} else {
 			System.out.println("You lose!");
