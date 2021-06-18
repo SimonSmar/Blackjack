@@ -3,6 +3,7 @@ package blackjack.core;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Deck {
 	Stack<Card> deck = new Stack<Card>();

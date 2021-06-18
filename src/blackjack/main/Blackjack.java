@@ -11,6 +11,7 @@ public class Blackjack {
 	public static void main(String[] args) {
 		//Initialize
 		Deck deck = new Deck(1);
+		deck.shuffle();
 		Player player = new Player(100);
 		Dealer dealer = new Dealer();
 		//Start Game
@@ -40,6 +41,7 @@ public class Blackjack {
 				player.addCard(deck.dealCard());
 				System.out.println(player.displayHand());
 				playerHandValue = player.hand.calculateValue();
+				System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
 				if(player.hand.checkBust()) {
 					System.out.println("Bust!");
 					playerFinished = true;
@@ -47,7 +49,12 @@ public class Blackjack {
 			} else {
 				playerFinished = true;
 			}
-			System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+		}
+		int playerFinalValue;
+		if(playerHandValue.length == 2) {
+			playerFinalValue = playerHandValue[1];
+		} else {
+			playerFinalValue = playerHandValue[0];
 		}
 		System.out.println("----Dealers turn-----");
 		boolean dealerFinished = false;
@@ -73,8 +80,37 @@ public class Blackjack {
 				dealerFinished = true;
 			}
 		}
-		
-	}
+		int dealerFinalValue;
+		if(dealerHandValue.length == 2) {
+			dealerFinalValue = playerHandValue[1];
+		} else {
+			dealerFinalValue = playerHandValue[0];
+		}
+		//Check who wins
+		if(player.hand.hasBlackjack()){
+			if(dealer.hand.hasBlackjack()) {
+			System.out.println("Push!");
+			} else {
+				System.out.println("Player wins!");
+			}
+		}
+		if(!player.hand.checkBust()) {
+			if(dealer.hand.checkBust()) {
+				System.out.println("You win!");
+				} else {
+					if(playerFinalValue == dealerFinalValue) {
+						System.out.println("Push!");
+					} else if(playerFinalValue > dealerFinalValue) {
+						System.out.println("You win!");
+					} else {
+						System.out.println("Dealer wins!");
+					}
+					System.out.println("Reached A");
+				}
+		} else {
+			System.out.println("You lose!");
+		}
+		}
 	
 	public static char userHitStick() {
 		char userInput = scnr.next().charAt(0);
