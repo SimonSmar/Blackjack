@@ -12,7 +12,7 @@ public class Hand {
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
-	
+
 	public int getCardAmount() {
 		return cards.size();
 	}
@@ -85,7 +85,7 @@ public class Hand {
 			if ((cards.get(0).getValue() == Value.ACE && cards.get(1).getNumericalValue() == 10)
 					|| (cards.get(0).getNumericalValue() == 10 && cards.get(1).getValue() == Value.ACE)) {
 				finished = true;
-				int[] bjv = {21};
+				int[] bjv = { 21 };
 				values = bjv;
 				return true;
 			}

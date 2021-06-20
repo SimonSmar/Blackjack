@@ -2,26 +2,29 @@ package blackjack.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import blackjack.core.*;
 
 public class Blackjack {
 	static Scanner scnr = new Scanner(System.in);
+	static User player = new User(1000);
+	static Dealer dealer = new Dealer();
 
 	public static void main(String[] args) {
 		// Initialize
 		System.out.println("Welcome to blackjack!");
 		System.out.println("Dealer sticks at 17");
-		while (true) {
+		boolean gameOver = false;
+		while (!gameOver) {
 			System.out.println("___________________");
 			Deck deck = new Deck(1);
 			deck.shuffle();
-			Player player = new Player(100);
-			Dealer dealer = new Dealer();
 			// Start Game
 			System.out.println("Chips:" + player.getChips());
-
+			int bet = takePlayerBet();
+			int winAmount = bet;
 			// Deal card to player and dealer
 			player.addCard(deck.dealCard());
 			dealer.addCard(deck.dealCard());
@@ -35,11 +38,11 @@ public class Blackjack {
 			System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
 			boolean playerFinished = false;
 			if (player.hand.hasBlackjack()) {
+				player.addChips(bet / 2);
 				System.out.println("BLACKJACK!");
 				playerFinished = true;
 			}
 			while (!playerFinished) {
-				wait(1000);
 				if (player.hand.getCardAmount() == 2) {
 					System.out.println("[H]it, [S]tick or [D]ouble down?");
 					char input = userHitStickDouble();
@@ -48,19 +51,25 @@ public class Blackjack {
 						System.out.println(player.displayHand());
 						playerHandValue = player.hand.calculateValue();
 						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						wait(1000);
 						if (player.hand.checkBust()) {
 							System.out.println("Bust!");
 							playerFinished = true;
 						}
 					} else if (input == 'D') {
-						player.addCard(deck.dealCard());
-						System.out.println(player.displayHand());
-						playerHandValue = player.hand.calculateValue();
-						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						if (player.setBet(bet)) {
+							player.addCard(deck.dealCard());
+							System.out.println(player.displayHand());
+							playerHandValue = player.hand.calculateValue();
+							System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+							winAmount += bet;
+							playerFinished = true;
+							wait(1000);
+						} else {
+						}
 						if (player.hand.checkBust()) {
 							System.out.println("Bust!");
 						}
-						playerFinished = true;
 					} else {
 						playerFinished = true;
 					}
@@ -72,6 +81,7 @@ public class Blackjack {
 						System.out.println(player.displayHand());
 						playerHandValue = player.hand.calculateValue();
 						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						wait(1000);
 						if (player.hand.checkBust()) {
 							System.out.println("Bust!");
 							playerFinished = true;
@@ -88,11 +98,13 @@ public class Blackjack {
 				playerFinalValue = playerHandValue[0];
 			}
 			System.out.println("Your final hand value:" + playerFinalValue);
+			wait(1000);
 			System.out.println("----Dealers turn-----");
 			boolean dealerFinished = false;
 			int[] dealerHandValue = dealer.hand.calculateValue();
 			System.out.println("Dealer hand value:" + Arrays.toString(dealerHandValue));
 			System.out.println(dealer.displayHand());
+			wait(1000);
 			if (dealer.hand.hasBlackjack()) {
 				System.out.println("Dealer has Blackjack!");
 				dealerFinished = true;
@@ -105,6 +117,7 @@ public class Blackjack {
 			while (!dealerFinished) {
 				wait(1000);
 				System.out.println("Dealer hits...");
+				wait(1000);
 				dealer.addCard(deck.dealCard());
 				dealerHandValue = dealer.hand.calculateValue();
 				System.out.println(dealer.displayHand());
@@ -132,17 +145,21 @@ public class Blackjack {
 				if (dealer.hand.hasBlackjack()) {
 					System.out.println("Push!");
 				} else {
-					System.out.println("Player wins!");
+					winAmount += bet * 2;
+					userWin(player, winAmount);
 				}
 			} else {
 				if (!player.hand.checkBust()) {
 					if (dealer.hand.checkBust()) {
-						System.out.println("You win!");
+						winAmount += bet * 2;
+						userWin(player, winAmount);
 					} else {
 						if (playerFinalValue == dealerFinalValue) {
 							System.out.println("Push!");
+							player.addChips(bet);
 						} else if (playerFinalValue > dealerFinalValue) {
-							System.out.println("You win!");
+							bet += bet * 2;
+							userWin(player, bet);
 						} else {
 							System.out.println("Dealer wins!");
 						}
@@ -151,7 +168,36 @@ public class Blackjack {
 					System.out.println("You lose!");
 				}
 			}
+			player.clearHand();
+			dealer.clearHand();
+			if (player.getChips() <= 0) {
+				System.out.println("You're bankrupt! Game Over!");
+				gameOver = true;
+			}
 		}
+	}
+
+	private static int takePlayerBet() {
+		System.out.print("Enter bet amount: ");
+		int betAmount = 0;
+		boolean validBet = false;
+		while (!validBet) {
+			boolean validNumber = false;
+			try {
+				betAmount = scnr.nextInt();
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid number");
+				scnr.next();
+				continue;
+			}
+			if (player.setBet(betAmount) && betAmount > 0) {
+				System.out.println("Bet Accepted! (" + betAmount + ")");
+				validBet = true;
+			} else {
+				System.out.print("Invalid bet, try again!");
+			}
+		}
+		return betAmount;
 	}
 
 	public static char userHitStick() {
@@ -167,6 +213,11 @@ public class Blackjack {
 			validVoidInput = userInput == 'H' || userInput == 'S';
 		}
 		return userInput;
+	}
+
+	public static void userWin(User user, int winAmount) {
+		System.out.println("You win!");
+		user.addChips(winAmount);
 	}
 
 	public static char userHitStickDouble() {

@@ -83,7 +83,7 @@ public class Deck {
 		Card c = deck.pop();
 		return c;
 	}
-	
+
 	public int getRemainingCards() {
 		return deck.size();
 	}

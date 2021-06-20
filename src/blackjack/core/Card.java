@@ -47,21 +47,17 @@ public class Card {
 	public String toString() {
 		String s = "[";
 		switch (suit) {
-		// These symbols don't display correctly in console and I spent about 35min
-		// trying to find a solution on how to display them.
-		// If you decide to compile and run this, just imagine it displays the correct
-		// symbol 😇
 		case DIAMONDS:
-			s += "D|";
+			s += "♦";
 			break;
 		case CLUBS:
-			s += "C|";
+			s += "♣";
 			break;
 		case HEARTS:
-			s += "H|";
+			s += "♥";
 			break;
 		case SPADES:
-			s += "S|";
+			s += "♠";
 			break;
 		}
 		switch (value) {
