@@ -31,6 +31,7 @@ public class Deck {
 		deck.add(new Card(Suit.CLUBS,Value.THREE));
 		deck.add(new Card(Suit.CLUBS,Value.TWO));
 		//HEARTS
+		deck.add(new Card(Suit.HEARTS,Value.ACE));
 		deck.add(new Card(Suit.HEARTS,Value.KING));
 		deck.add(new Card(Suit.HEARTS,Value.QUEEN));
 		deck.add(new Card(Suit.HEARTS,Value.JACK));
@@ -44,6 +45,7 @@ public class Deck {
 		deck.add(new Card(Suit.HEARTS,Value.THREE));
 		deck.add(new Card(Suit.HEARTS,Value.TWO));
 		//SPADES
+		deck.add(new Card(Suit.SPADES,Value.ACE));
 		deck.add(new Card(Suit.SPADES,Value.KING));
 		deck.add(new Card(Suit.SPADES,Value.QUEEN));
 		deck.add(new Card(Suit.SPADES,Value.JACK));
@@ -57,6 +59,7 @@ public class Deck {
 		deck.add(new Card(Suit.SPADES,Value.THREE));
 		deck.add(new Card(Suit.SPADES,Value.TWO));
 		//DIAMONDS
+		deck.add(new Card(Suit.SPADES,Value.ACE));
 		deck.add(new Card(Suit.DIAMONDS,Value.KING));
 		deck.add(new Card(Suit.DIAMONDS,Value.QUEEN));
 		deck.add(new Card(Suit.DIAMONDS,Value.JACK));

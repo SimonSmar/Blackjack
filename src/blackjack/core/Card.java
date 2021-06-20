@@ -9,7 +9,7 @@ public class Card {
 	public Card(Suit suit, Value value) {
 		this.suit = suit;
 		this.value = value;
-		isFace = value == Value.KING ||value == Value.QUEEN||value ==Value.QUEEN||value == Value.JACK;
+		isFace = value == Value.KING ||value == Value.QUEEN||value ==Value.JACK;
 	}
 	
 	public Value getValue() {
@@ -17,7 +17,8 @@ public class Card {
 	}
 	
 	public int getNumericalValue() {
-		if(value == Value.KING ||value == Value.QUEEN||value ==Value.JACK||value == Value.TEN) {
+		if(isFace||value == Value.TEN) {
+		//if(value == Value.KING ||value == Value.QUEEN||value ==Value.JACK||value == Value.TEN) {
 			return 10;
 		}
 		switch (value) {

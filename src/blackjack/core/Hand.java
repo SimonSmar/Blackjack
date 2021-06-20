@@ -18,6 +18,10 @@ public class Hand {
 	}
 	
 	public int[] calculateValue() {
+		if(hasBlackjack()) {
+			int[] temp = {21};
+			return temp;
+		}
 		//System.out.println("[Calculating Hand Value]");
 		int aceCount = 0;
 		//Calculate possible hand values
