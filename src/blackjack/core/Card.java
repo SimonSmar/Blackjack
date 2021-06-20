@@ -9,16 +9,15 @@ public class Card {
 	public Card(Suit suit, Value value) {
 		this.suit = suit;
 		this.value = value;
-		isFace = value == Value.KING ||value == Value.QUEEN||value ==Value.JACK;
+		isFace = value == Value.KING || value == Value.QUEEN || value == Value.JACK;
 	}
-	
+
 	public Value getValue() {
 		return value;
 	}
-	
+
 	public int getNumericalValue() {
-		if(isFace||value == Value.TEN) {
-		//if(value == Value.KING ||value == Value.QUEEN||value ==Value.JACK||value == Value.TEN) {
+		if (isFace || value == Value.TEN) {
 			return 10;
 		}
 		switch (value) {
@@ -48,8 +47,10 @@ public class Card {
 	public String toString() {
 		String s = "[";
 		switch (suit) {
-		//These symbols don't display correctly in console and I spent about 35min trying to find a solution on how to display them.
-		//If you decide to compile and run this, just imagine it displays the correct symbol 😇
+		// These symbols don't display correctly in console and I spent about 35min
+		// trying to find a solution on how to display them.
+		// If you decide to compile and run this, just imagine it displays the correct
+		// symbol 😇
 		case DIAMONDS:
 			s += "D|";
 			break;

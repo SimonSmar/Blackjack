@@ -20,6 +20,7 @@ public class Blackjack {
 			Player player = new Player(100);
 			Dealer dealer = new Dealer();
 			// Start Game
+			System.out.println("Chips:" + player.getChips());
 
 			// Deal card to player and dealer
 			player.addCard(deck.dealCard());
@@ -38,19 +39,46 @@ public class Blackjack {
 				playerFinished = true;
 			}
 			while (!playerFinished) {
-				System.out.println("[H]it or [s]tick?");
-				char input = userHitStick();
-				if (input == 'H') {
-					player.addCard(deck.dealCard());
-					System.out.println(player.displayHand());
-					playerHandValue = player.hand.calculateValue();
-					System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
-					if (player.hand.checkBust()) {
-						System.out.println("Bust!");
+				wait(1000);
+				if (player.hand.getCardAmount() == 2) {
+					System.out.println("[H]it, [S]tick or [D]ouble down?");
+					char input = userHitStickDouble();
+					if (input == 'H') {
+						player.addCard(deck.dealCard());
+						System.out.println(player.displayHand());
+						playerHandValue = player.hand.calculateValue();
+						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						if (player.hand.checkBust()) {
+							System.out.println("Bust!");
+							playerFinished = true;
+						}
+					} else if (input == 'D') {
+						player.addCard(deck.dealCard());
+						System.out.println(player.displayHand());
+						playerHandValue = player.hand.calculateValue();
+						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						if (player.hand.checkBust()) {
+							System.out.println("Bust!");
+						}
+						playerFinished = true;
+					} else {
 						playerFinished = true;
 					}
 				} else {
-					playerFinished = true;
+					System.out.println("[H]it or [s]tick?");
+					char input = userHitStick();
+					if (input == 'H') {
+						player.addCard(deck.dealCard());
+						System.out.println(player.displayHand());
+						playerHandValue = player.hand.calculateValue();
+						System.out.println("Your hand value:" + Arrays.toString(playerHandValue));
+						if (player.hand.checkBust()) {
+							System.out.println("Bust!");
+							playerFinished = true;
+						}
+					} else {
+						playerFinished = true;
+					}
 				}
 			}
 			int playerFinalValue;
@@ -59,7 +87,7 @@ public class Blackjack {
 			} else {
 				playerFinalValue = playerHandValue[0];
 			}
-			System.out.println("Final hand value:" + playerFinalValue);
+			System.out.println("Your final hand value:" + playerFinalValue);
 			System.out.println("----Dealers turn-----");
 			boolean dealerFinished = false;
 			int[] dealerHandValue = dealer.hand.calculateValue();
@@ -75,12 +103,7 @@ public class Blackjack {
 				dealerFinished = true;
 			}
 			while (!dealerFinished) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				wait(1000);
 				System.out.println("Dealer hits...");
 				dealer.addCard(deck.dealCard());
 				dealerHandValue = dealer.hand.calculateValue();
@@ -103,6 +126,7 @@ public class Blackjack {
 			}
 			System.out.println("Dealer final hand value:" + dealerFinalValue);
 			System.out.println("__________________________");
+			wait(1000);
 			/////////// Check who wins
 			if (player.hand.hasBlackjack()) {
 				if (dealer.hand.hasBlackjack()) {
@@ -141,6 +165,21 @@ public class Blackjack {
 			userInput = scnr.next().charAt(0);
 			userInput = Character.toUpperCase(userInput);
 			validVoidInput = userInput == 'H' || userInput == 'S';
+		}
+		return userInput;
+	}
+
+	public static char userHitStickDouble() {
+		char userInput = scnr.next().charAt(0);
+		userInput = Character.toUpperCase(userInput);
+		boolean validVoidInput = userInput == 'H' || userInput == 'S' || userInput == 'D';
+		// Validate void input
+		while (!validVoidInput) {
+			System.out.println("--Invalid answer, try again!--");
+			System.out.println("Enter H for 'Hit', S for 'Stick' and D for 'Double Down' ");
+			userInput = scnr.next().charAt(0);
+			userInput = Character.toUpperCase(userInput);
+			validVoidInput = userInput == 'H' || userInput == 'S' || userInput == 'D';
 		}
 		return userInput;
 	}
@@ -263,4 +302,12 @@ public class Blackjack {
 		System.out.println("_____________________");
 	}
 
+	public static void wait(int milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
